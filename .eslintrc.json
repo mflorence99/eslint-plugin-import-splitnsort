@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "eslint-config-mflorence99"
+  ],
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json"
+    ]
+  },
+  "root": true
+}
