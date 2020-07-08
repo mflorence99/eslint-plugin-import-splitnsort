@@ -1,4 +1,6 @@
-export = {
+import splitnsort from './splitnsort';
+
+const plugin = {
 
   configs: {
     recommended: {
@@ -11,6 +13,12 @@ export = {
         'import-splitnsort/split-and-sort': 'error'
       }
     }
+  },
+
+  rules: {
+    'split-and-sort': splitnsort
   }
 
 };
+
+export default plugin;

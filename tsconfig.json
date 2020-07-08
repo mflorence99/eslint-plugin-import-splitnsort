@@ -9,12 +9,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "pretty": true,
     "sourceMap": true,
-    "strict": true,
-    "target": "esnext",
+    "strict": false,
+    "target": "es2019",
     "lib": [
       "es2019"
     ]
