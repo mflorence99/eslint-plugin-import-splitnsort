@@ -1,6 +1,5 @@
 import * as eslint from 'eslint';
 import * as estree from 'estree';
-import * as process from 'process';
 
 const ruleModule: eslint.Rule.RuleModule = {
 
