@@ -11,35 +11,40 @@ const ruleTester = new eslint.RuleTester({
   }
 });
 
+const valid = `import './code';
+
+import { X } from './my-module.js';
+import { Y as Z } from './my-module.js';
+
+import { a } from './my-module.js';
+
+import num from './my-module.js';
+
+import * as validator from '@validator';
+
+export function f() { }`;
+
+const invalid = `import num, { a, X, Y as Z } from "./my-module.js";
+import * as validator from "@validator";
+import "./code";
+
+export function f() { }`;
+
 ruleTester.run('split-and-sort: Smote Test', splitnsort, {
   valid: [
     {
-      code: `
-        import './code';
-
-        import { X } from './my-module.js';
-        import { Y as Z } from './my-module.js';
-
-        import { a } from './my-module.js';
-
-        import num from './my-module.js';
-
-        import * as validator from '@validator';
-      `
+      code: valid
     }
   ],
   invalid: [
     {
-      code: `
-        import num, { a, X, Y as Z } from "./my-module.js";
-        import * as validator from "@validator";
-        import "./code";
-        // import zip = require('./ZipCodeValidator');
-        // import type { APIResponseType } from "./api";
-
-        export function f() { }
-      `,
-      errors: [{messageId: 'splitnsort'}]
+      code: invalid,
+      errors: [{
+        suggestions: [{
+          desc: 'Run autofix to sort these imports',
+          output: valid
+        }]
+      }]
     }
   ]
 });

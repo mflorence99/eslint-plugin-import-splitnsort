@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "name": "Debug splitnsort Tests",
+      "port": 9229,
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "type": "node"
+    }
+  ],
+  "version": "0.2.0"
+}

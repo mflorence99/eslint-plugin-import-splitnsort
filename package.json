@@ -21,8 +21,7 @@
     "node": "^10.12.0 || >=12.0.0"
   },
   "files": [
-    "dist",
-    "docs",
+    "dist/*.js",
     "package.json",
     "README.md",
     "LICENSE"
@@ -58,5 +57,5 @@
     "test:only": "jest --coverage=false -- %1",
     "test:watch": "jest --watch"
   },
-  "version": "0.0.0"
+  "version": "0.1.0"
 }

@@ -1,6 +1,6 @@
 import splitnsort from './splitnsort';
 
-const plugin = {
+export = {
 
   configs: {
     recommended: {
@@ -20,5 +20,3 @@ const plugin = {
   }
 
 };
-
-export default plugin;
