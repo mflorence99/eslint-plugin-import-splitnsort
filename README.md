@@ -85,7 +85,7 @@ In your `.eslintrc` configuration:
 }
 ```
 
-You can configure the one and rule, or reconfigure it if you extended `plugin:import-splitnsort/recommended`:
+You can configure the one and only rule, or reconfigure it if you extended `plugin:import-splitnsort/recommended`:
 
 ```js
 {
