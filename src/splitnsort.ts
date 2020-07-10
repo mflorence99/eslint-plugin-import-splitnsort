@@ -1,5 +1,6 @@
 import * as eslint from 'eslint';
 import * as estree from 'estree';
+import * as process from 'process';
 
 const ruleModule: eslint.Rule.RuleModule = {
 
@@ -63,17 +64,21 @@ const ruleModule: eslint.Rule.RuleModule = {
           let stmts = [];
           switch (type) {
             case 'sideEffect':
-              stmts = extracted.sort(sorter).map(source => `import ${quote}${source}${quote}${semi}`);
+              stmts = extracted.sort(sorter)
+                .map(source => `import ${quote}${source}${quote}${semi}`);
               break;
             case 'namespace':
-              stmts = Object.keys(extracted).sort(sorter).map(nm => `import * as ${nm} from ${quote}${extracted[nm]}${quote}${semi}`);
+              stmts = Object.keys(extracted).sort(sorter)
+                .map(nm => `import * as ${nm} from ${quote}${extracted[nm]}${quote}${semi}`);
               break;
             case 'namedClass':
             case 'namedFunction':
-              stmts = Object.keys(extracted).sort(sorter).map(nm => `import ${braces[0]}${nm}${braces[1]} from ${quote}${extracted[nm]}${quote}${semi}`);
+              stmts = Object.keys(extracted).sort(sorter)
+                .map(nm => `import ${braces[0]}${nm}${braces[1]} from ${quote}${extracted[nm]}${quote}${semi}`);
               break;
             case 'default':
-              stmts = Object.keys(extracted).sort(sorter).map(nm => `import ${nm} from ${quote}${extracted[nm]}${quote}${semi}`);
+              stmts = Object.keys(extracted).sort(sorter)
+                .map(nm => `import ${nm} from ${quote}${extracted[nm]}${quote}${semi}`);
               break;
           }
           generated.push(...stmts);
@@ -118,7 +123,8 @@ const ruleModule: eslint.Rule.RuleModule = {
             // otherwise the import is from node_modules
             const code = sourceCode.getText(declaration);
             const moduleName = declaration.source.value as string;
-            const base = (moduleName.startsWith('.') || moduleName.startsWith('/')) ? imports.local : imports.nodeModules;
+            const base = (moduleName.startsWith('.') || moduleName.startsWith('/')) ? 
+              imports.local : imports.nodeModules;
 
             // make a guess at the original source coding conventions
             if (code.includes('\''))
@@ -178,7 +184,12 @@ const ruleModule: eslint.Rule.RuleModule = {
       'Program:exit': (program: estree.Program) => {
         const code = context.getSourceCode().getText(program);
         const generated = splitnsort().join('\n').trim();
-        if (atLeastOne && (generated !== code.substring(range[0], range[1]))) {
+        // NOTE: the "code" as generated from the program node doesn't start
+        // until the first statement, skipping initial comments and whitespace
+        // so ... we have to offset our range by the program start
+        const offset = program.range[0];
+        if (atLeastOne 
+          && (generated !== code.substring(range[0] - offset, range[1] - offset))) {
           context.report({ 
             fix: (fixer: eslint.Rule.RuleFixer): any => {
               return fixer.replaceTextRange(range, generated);
