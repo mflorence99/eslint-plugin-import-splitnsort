@@ -78,7 +78,7 @@ Additionally, imports are partitioned into two sections. The first section compr
 
 In your `.eslintrc` configuration:
 
-```json
+```js
 {
   plugins: ['import-splitnsort', ...],
   extends: ['plugin:import-splitnsort/recommended', ...]
@@ -87,7 +87,7 @@ In your `.eslintrc` configuration:
 
 You can configure the one and rule, or reconfigure it if you extended `plugin:import-splitnsort/recommended`:
 
-```json
+```js
 {
   rules: {
     'import-splitnsort/split-and-sort': 'off | warn | error'
@@ -97,7 +97,7 @@ You can configure the one and rule, or reconfigure it if you extended `plugin:im
 
 > Don't forget to turn off any other import sorting rules or VSCode plugins!
 
-```json
+```js
 {
   rules: {
     'sort-imports': 'off'
