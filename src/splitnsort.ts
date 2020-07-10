@@ -5,6 +5,14 @@ const ruleModule: eslint.Rule.RuleModule = {
 
   create: (context: eslint.Rule.RuleContext): eslint.Rule.RuleListener => {
 
+    let atLeastOne = false;
+
+    // make a guess at the original source coding conventions
+
+    let braces = ['{ ', ' }'];
+    let quote = '\'';
+    let semi = ';';
+
     // split-and-sort extracts imports into these categories
 
     const imports = {
@@ -55,17 +63,17 @@ const ruleModule: eslint.Rule.RuleModule = {
           let stmts = [];
           switch (type) {
             case 'sideEffect':
-              stmts = extracted.sort(sorter).map(source => `import '${source}';`);
+              stmts = extracted.sort(sorter).map(source => `import ${quote}${source}${quote}${semi}`);
               break;
             case 'namespace':
-              stmts = Object.keys(extracted).sort(sorter).map(nm => `import * as ${nm} from '${extracted[nm]}';`);
+              stmts = Object.keys(extracted).sort(sorter).map(nm => `import * as ${nm} from ${quote}${extracted[nm]}${quote}${semi}`);
               break;
             case 'namedClass':
             case 'namedFunction':
-              stmts = Object.keys(extracted).sort(sorter).map(nm => `import { ${nm} } from '${extracted[nm]}';`);
+              stmts = Object.keys(extracted).sort(sorter).map(nm => `import ${braces[0]}${nm}${braces[1]} from ${quote}${extracted[nm]}${quote}${semi}`);
               break;
             case 'default':
-              stmts = Object.keys(extracted).sort(sorter).map(nm => `import ${nm} from '${extracted[nm]}';`);
+              stmts = Object.keys(extracted).sort(sorter).map(nm => `import ${nm} from ${quote}${extracted[nm]}${quote}${semi}`);
               break;
           }
           generated.push(...stmts);
@@ -93,6 +101,7 @@ const ruleModule: eslint.Rule.RuleModule = {
         program.body
           .filter(node => node.type === 'ImportDeclaration')
           .forEach((declaration: estree.ImportDeclaration) => {
+            atLeastOne = true;
 
             // expand the known location of the original imports
             loc.start.line = Math.min(loc.start.line, declaration.loc.start.line);
@@ -110,6 +119,16 @@ const ruleModule: eslint.Rule.RuleModule = {
             const code = sourceCode.getText(declaration);
             const moduleName = declaration.source.value as string;
             const base = (moduleName.startsWith('.') || moduleName.startsWith('/')) ? imports.local : imports.nodeModules;
+
+            // make a guess at the original source coding conventions
+            if (code.includes('\''))
+              quote = '\'';
+            else if (code.includes('"'))
+              quote = '"';
+            const match = /(\{[\s]*).*[^\s]+([\s]*\})/g.exec(code);
+            if (match)
+              braces = [match[1], match[2]];
+            semi = code.endsWith(';') ? ';' : '';
 
             // no specifiers at all means a side-effect import
             // eg: import from 'esprima'
@@ -159,16 +178,13 @@ const ruleModule: eslint.Rule.RuleModule = {
       'Program:exit': (program: estree.Program) => {
         const code = context.getSourceCode().getText(program);
         const generated = splitnsort().join('\n').trim();
-        if (generated !== code.substring(range[0], range[1])) {
+        if (atLeastOne && (generated !== code.substring(range[0], range[1]))) {
           context.report({ 
+            fix: (fixer: eslint.Rule.RuleFixer): any => {
+              return fixer.replaceTextRange(range, generated);
+            },
             loc, 
-            messageId: 'splitnsort', 
-            suggest: [{
-              messageId: 'splitnsort',
-              fix: (fixer: eslint.Rule.RuleFixer): any => {
-                return fixer.replaceTextRange(range, generated);
-              }
-            }]
+            messageId: 'splitnsort'
           });
         }
       }

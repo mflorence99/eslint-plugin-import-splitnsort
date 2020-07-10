@@ -13,6 +13,7 @@
     "@typescript-eslint/parser": "^3.6",
     "eslint": "^7",
     "eslint-config-mflorence99": "latest",
+    "eslint-plugin-import-splitnsort": "latest",
     "jest": "^26.1.0",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9"
@@ -57,5 +58,5 @@
     "test:only": "jest --coverage=false -- %1",
     "test:watch": "jest --watch"
   },
-  "version": "0.1.0"
+  "version": "0.1.1"
 }

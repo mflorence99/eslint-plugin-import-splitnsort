@@ -24,9 +24,9 @@ import * as validator from '@validator';
 
 export function f() { }`;
 
-const invalid = `import num, { a, X, Y as Z } from "./my-module.js";
-import * as validator from "@validator";
-import "./code";
+const invalid = `import num, { a, X, Y as Z } from './my-module.js';
+import * as validator from '@validator';
+import './code';
 
 export function f() { }`;
 
@@ -39,12 +39,8 @@ ruleTester.run('split-and-sort: Smote Test', splitnsort, {
   invalid: [
     {
       code: invalid,
-      errors: [{
-        suggestions: [{
-          desc: 'Run autofix to sort these imports',
-          output: valid
-        }]
-      }]
+      errors: [{ messageId: 'splitnsort' }],
+      output: valid
     }
   ]
 });
