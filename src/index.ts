@@ -8,7 +8,7 @@ export = {
       parserOptions: { 
         sourceType: 'module' 
       },
-      plugins: ['@typescript-eslint'],      
+      plugins: ['import-splitnsort'],      
       rules: {
         'import-splitnsort/split-and-sort': 'error'
       }
