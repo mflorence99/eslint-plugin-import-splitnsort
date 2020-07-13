@@ -1,4 +1,4 @@
-import plugin from './';
+const plugin = require('./');
 
 describe('index', () => {
 

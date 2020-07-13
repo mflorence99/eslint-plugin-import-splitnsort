@@ -52,7 +52,7 @@ const ruleModule: eslint.Rule.RuleModule = {
     const range: eslint.AST.Range = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
 
     // perform split-and-sort operation on the original imports
-    // and stach the result in "imports" above
+    // and stash the result in "imports" above
 
     const splitnsort = (): string[] => {
       const generated: string[] = [];
