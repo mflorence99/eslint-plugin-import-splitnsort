@@ -15,6 +15,8 @@ export = {
     }
   },
 
+  name: 'eslint-plugin-import-splitnsort',
+
   rules: {
     'split-and-sort': splitnsort
   }
