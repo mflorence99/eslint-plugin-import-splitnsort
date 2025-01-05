@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import-splitnsort",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "ESLInt plugin to enforce idiosyncratic TypeScript import style and ordering, deprecating VSCode plugin import-splitnsort",
   "keywords": [
     "eslint",
