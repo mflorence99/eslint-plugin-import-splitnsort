@@ -4,6 +4,7 @@ export = {
 
   configs: {
     recommended: {
+      name: 'eslint-plugin-import-splitnsort',
       parser: '@typescript-eslint/parser',
       parserOptions: { 
         sourceType: 'module' 
@@ -14,8 +15,6 @@ export = {
       }
     }
   },
-
-  name: 'eslint-plugin-import-splitnsort',
 
   rules: {
     'split-and-sort': splitnsort
